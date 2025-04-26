@@ -7,7 +7,8 @@ import http from "http";
 import cors from "cors";
 import express from "express";
 import taskmodel from "./mode/taskmodel";
-import { Server as socketIo } from "socket.io";
+// import { socketIo } from "socket.io";
+import { Server as socketIo } from "socket.io"; // Updated import for socket.io
 const port = process.env.PORT || 4000;
 
 const app = express();
