@@ -1,0 +1,88 @@
+# 📝 Task Notes Application
+
+A real-time task notes app built with modern web technologies. This application allows users to create, update, and view tasks with real-time sync using Socket.IO. It supports infinite scrolling and paginated API fetching (10 tasks per page).
+
+---
+
+## 🚀 Tech Stack
+
+- **Frontend**: React (Vite)
+- **Backend**: Node.js + Express.js
+- **Real-time**: Socket.IO
+- **Language**: TypeScript (Frontend and Backend)
+- **Database**: MongoDB
+- **Cache**: Redis
+- **Pagination**: Infinite Scroll with controlled API fetch
+- **Limit**: Only 10 pages (maximum 100 tasks) can be fetched
+
+---
+
+## 📦 Features
+
+- ✅ Real-time updates using Socket.IO
+- ✅ Add, update, and delete task notes
+- ✅ Infinite scrolling for task list
+- ✅ Paginated backend API (10 tasks per page)
+- ✅ API fetches a maximum of 10 pages (100 tasks)
+- ✅ Redis is used as a temporary cache for tasks
+- ✅ When Redis has more than 40 tasks, they are inserted into MongoDB automatically
+- ✅ Clean architecture with TypeScript on both client and server
+- ✅ Responsive and fast UI built with React & Vite
+
+---
+
+## 📂 Project Structure
+---
+
+## 📡 API Endpoints
+
+### `GET /api/getAll?page=1`
+
+- Returns 10 tasks per page.
+- Maximum allowed page: 10
+
+### `POST /api/tasks`
+
+- Adds a new task
+
+
+## 🧠 Redis and MongoDB Integration
+
+- Tasks are first stored temporarily in **Redis** for faster access.
+- When the number of tasks in Redis exceeds **40**, the tasks are **bulk inserted into MongoDB**.
+- This ensures fast performance and optimized database operations.
+
+---
+
+## 🔁 Real-Time Features (Socket.IO)
+
+- Whenever a task is added, updated, or deleted, all connected clients receive instant updates in real-time without refreshing the page.
+
+---
+
+## 🧑‍💻 Setup Instructions
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/your-username/task-notes-app.git
+cd task-notes-app
+
+# Backend
+cd server
+npm install
+
+# Frontend
+cd ../client
+npm install
+PORT=5000
+MONGO_URI=your-mongodb-connection-string
+REDIS_URL=your-redis-connection-string
+# Start backend
+cd server
+npm run dev
+
+# Start frontend
+cd ../client
+npm run dev
+
