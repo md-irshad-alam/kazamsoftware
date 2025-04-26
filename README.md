@@ -30,6 +30,12 @@ A real-time task notes app built with modern web technologies. This application 
 - ✅ Responsive and fast UI built with React & Vite
 
 ---
+## Responsive Design
+#mobile
+![image](https://github.com/user-attachments/assets/83395691-b358-4ee9-8e7a-aae05f299b8d)
+#iPad mini
+![image](https://github.com/user-attachments/assets/655d2a12-81e8-4c27-ba81-c2ef1c0ceed6)
+
 
 ## 📂 Project Structure
 ---
