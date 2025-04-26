@@ -3,7 +3,7 @@ import { fetchNotes } from "./service/fetchApi";
 import "./App.css";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4000");
+const socket = io("https://kazamsoftware.onrender.com");
 function App() {
   interface Note {
     content: string;
@@ -18,7 +18,7 @@ function App() {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:4000/getAll?page=${page}&limit=10` // Corrected the query string
+        `https://kazamsoftware.onrender.com/getAll?page=${page}&limit=10` // Corrected the query string
       );
       const data = await res.json();
 
