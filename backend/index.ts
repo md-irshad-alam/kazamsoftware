@@ -25,10 +25,13 @@ const io = new socketIo(server, {
 app.use(express.json());
 app.use(express.static("public"));
 app.use(cors());
+// db connection
 connection();
+// scoket connection
 io.on("connection", (socket: any) => {
   socket.on("add", async (item: any) => {
     try {
+      // redis connection
       const data = await redis.get(REDIS_KEY);
       let tasks = data ? JSON.parse(data) : [];
       tasks.push({ content: item.content, createdAt: new Date() });
@@ -47,29 +50,21 @@ io.on("connection", (socket: any) => {
   });
 });
 
+// Get all tasks from redis and mongodb
 app.get("/getAll", async (req: any, res: any) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-
     const redisData = await redis.get(REDIS_KEY);
     const redisTask = redisData ? JSON.parse(redisData) : [];
     const redisTaskSorted = redisTask.sort(
       (a: any, b: any) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-
     const mongoTasks = await taskmodel.find({}).sort({ createdAt: -1 });
     const allTasks = [...redisTaskSorted, ...mongoTasks];
-
-    // Pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const paginatedTasks = allTasks.slice(startIndex, endIndex);
-
     res.json({
-      data: paginatedTasks,
+      data: allTasks,
       total: allTasks.length,
+      source: "combined",
     });
   } catch (error) {
     console.log(error);
@@ -77,14 +72,6 @@ app.get("/getAll", async (req: any, res: any) => {
   }
 });
 
-app.post("/post", (req: any, res: any) => {
-  try {
-    res.status(200).json({ message: "good" });
-  } catch (error) {
-    console.log(error);
-    res.send({ message: "internal error " });
-  }
-});
 server.listen(port, () => {
   try {
     console.log("server running!", port);
