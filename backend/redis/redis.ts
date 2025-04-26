@@ -1,10 +1,10 @@
-const dotenv = require("dotenv");
+import * as dotenv from "dotenv";
 dotenv.config();
 
 const Redis = require("ioredis");
 
 // Create a new Redis client
-const redis = new Redis({
+const redisClient = new Redis({
   host: "redis-12675.c212.ap-south-1-1.ec2.cloud.redislabs.com",
   port: "12675",
   username: "default",
@@ -13,13 +13,13 @@ const redis = new Redis({
 });
 
 // Test the Redis connection
-redis
+redisClient
   .ping()
   .then(() => {
     console.log("Connected to Redis!");
   })
-  .catch((err) => {
+  .catch((err: Error) => {
     console.error("Error connecting to Redis:", err);
   });
 
-module.exports = redis;
+module.exports = redisClient;

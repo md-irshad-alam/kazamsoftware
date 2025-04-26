@@ -37,8 +37,10 @@ function App() {
     }
   };
 
-  const handleAddNote = () => {
+  const handleAddNote = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (newNote.trim()) {
+      // Removed e.key check to allow adding notes on button click
       socket.emit("add", { content: newNote });
       setNewNote("");
       setNotes((prev) => [
@@ -66,28 +68,30 @@ function App() {
   }, [page]);
 
   return (
-    <div className="w-full bg-gray-100 lg:p-8 sm:p-8">
-      <div className="lg:w-[30vw] sm:w-[100%] mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="w-full  bg-white absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+      <div className="lg:w-[30vw] sm:w-[100%] mx-auto  rounded-lg shadow-md overflow-hidden">
         {/* App Header */}
-        <div className="bg-blue-600 p-4">
-          <h1 className="text-white text-xl font-bold">Note App</h1>
+        <div className="bg-gray-100 p-4 flex items-center justify-center gap-x-2">
+          <h1 className="text-black text-2xl font-bold">Note App</h1>
         </div>
 
         {/* Add Note Section */}
-        <div className="border-gray-300  shadow-sm rounded-b-2xl-lg  bg-red-300 p-4">
+        <div className="border-gray-300  shadow-sm rounded-b-2xl-lg   p-4">
           <div className="flex items-center justify-between gap-x-2">
             <input
               type="text"
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Enter your note..."
-              className="px-3 w-full py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 w-full py-2 text-black border-gray-300 outline-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               autoFocus
             />
 
             <button
-              onClick={handleAddNote}
-              className="flex gap-x-2 items-center transition"
+              onClick={(e: any) => handleAddNote(e)}
+              onKeyDown={(e: any) => handleAddNote(e)}
+              className="flex gap-x-2 items-center transition bg-[#92400E] hover:bg-[#92400E] text-white font-semibold py-2 px-4 rounded"
+              disabled={!newNote.trim()}
             >
               <span className=" ">
                 <img src="./plus.png" alt="" width={50} height={50} />
@@ -99,11 +103,11 @@ function App() {
 
         {/* Notes List */}
         <div className="p-4 ">
-          <h2 className="text-lg font-semibold text-gray-700 mb-3 text-left">
+          <h2 className="text-lg font-semibold text-black mb-3 text-left">
             Notes
           </h2>
           <ul
-            className="space-y-2 overflow-auto max-h-[40vh]" // fixed max-height and overflow-auto
+            className="space-y-2 overflow-auto max-h-[40vh] custom-scroll" // fixed max-height and overflow-auto
             onScroll={handleScroll}
             ref={listRef}
           >
@@ -111,14 +115,14 @@ function App() {
               <>
                 <li
                   key={index}
-                  className="p-3 bg-gray-50 rounded hover:bg-gray-400 cursor-pointer transition border-b-1 text-left"
+                  className="p-3 text-black bg-gray-50  hover:bg-gray-100 cursor-pointer transition border-b-1 text-left"
                 >
                   {note?.content}
                 </li>
                 {loading && (
                   <li
                     key={index}
-                    className="p-3 bg-gray-50 rounded hover:bg-gray-400 cursor-pointer transition border-b-1 text-center text-3xl"
+                    className="p-3 bg-gray-50 text-black rounded hover:bg-gray-400 cursor-pointer transition border-b-1 text-center text-3xl"
                   >
                     Loading...
                   </li>

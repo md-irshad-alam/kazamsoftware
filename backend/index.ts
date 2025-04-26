@@ -24,9 +24,9 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use(cors());
 connection();
-io.on("connection", (socket) => {
+io.on("connection", (socket: any) => {
   console.log("client connected");
-  socket.on("add", async (item) => {
+  socket.on("add", async (item: any) => {
     try {
       console.log("item", item);
       const data = await redis.get(REDIS_KEY);
@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/getAll", async (req, res) => {
+app.get("/getAll", async (req: any, res: any) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -55,7 +55,8 @@ app.get("/getAll", async (req, res) => {
     const redisData = await redis.get(REDIS_KEY);
     const redisTask = redisData ? JSON.parse(redisData) : [];
     const redisTaskSorted = redisTask.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      (a: any, b: any) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
     const mongoTasks = await taskmodel.find({}).sort({ createdAt: -1 });
@@ -76,7 +77,7 @@ app.get("/getAll", async (req, res) => {
   }
 });
 
-app.post("/post", (req, res) => {
+app.post("/post", (req: any, res: any) => {
   try {
     res.status(200).json({ message: "good" });
   } catch (error) {
