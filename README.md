@@ -44,6 +44,8 @@ A real-time task notes app built with modern web technologies. This application 
 ### `POST /api/tasks`
 
 - Adds a new task
+- Backend deployed URL https://kazamsoftware.onrender.com
+- Front-End deployement URL https://kazamsoftware-84tk.vercel.app/
 
 
 ## 🧠 Redis and MongoDB Integration
