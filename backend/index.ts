@@ -1,18 +1,19 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
-const connection = require("./controller/db");
-const http = require("http");
-const express = require("express");
-const cors = require("cors");
-const redis = require("./redis/redis");
-const taskmodel = require("./mode/taskmodel");
-const socketIo = require("socket.io");
+import redis from "./redis/redis";
+import connection from "./controller/db";
+import http from "http";
+
+import cors from "cors";
+import express from "express";
+import taskmodel from "./mode/taskmodel";
+import { Server as socketIo } from "socket.io";
 const port = process.env.PORT || 4000;
 
 const app = express();
 const server = http.createServer(app);
 const REDIS_KEY = process.env.TASK_KEY;
-const io = socketIo(server, {
+const io = new socketIo(server, {
   // Updated to use socketIo
   cors: {
     origin: "*", // You can specify the frontend URL here (e.g., http://localhost:3000)
@@ -25,10 +26,8 @@ app.use(express.static("public"));
 app.use(cors());
 connection();
 io.on("connection", (socket: any) => {
-  console.log("client connected");
   socket.on("add", async (item: any) => {
     try {
-      console.log("item", item);
       const data = await redis.get(REDIS_KEY);
       let tasks = data ? JSON.parse(data) : [];
       tasks.push({ content: item.content, createdAt: new Date() });

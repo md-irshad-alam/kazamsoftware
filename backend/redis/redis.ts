@@ -21,5 +21,4 @@ redisClient
   .catch((err: Error) => {
     console.error("Error connecting to Redis:", err);
   });
-
-module.exports = redisClient;
+export default redisClient;

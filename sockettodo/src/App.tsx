@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-
+import { fetchNotes } from "./service/fetchApi";
 import "./App.css";
 import { io } from "socket.io-client";
+
 const socket = io("http://localhost:4000");
 function App() {
   interface Note {
@@ -13,8 +14,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const listRef = useRef<HTMLUListElement>(null);
-
-  const fetchNotes = async () => {
+  const fetchNotes = async (page: number) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -23,7 +23,7 @@ function App() {
       const data = await res.json();
 
       // Prepend new notes to the existing ones to keep the latest on top
-      setNotes((prev) => [...data?.data, ...prev]); // Prepend new notes to the front
+      setNotes((prev: any) => [...data?.data, ...prev]); // Prepend new notes to the front
       console.log(data);
 
       if (data?.data.length === 0) {
@@ -36,7 +36,6 @@ function App() {
       setLoading(false);
     }
   };
-
   const handleAddNote = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newNote.trim()) {
@@ -64,7 +63,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetchNotes(); // Fetch notes on page change
+    fetchNotes(page);
   }, [page]);
 
   return (
