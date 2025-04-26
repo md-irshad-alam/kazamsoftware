@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchNotes } from "./service/fetchApi";
+
 import "./App.css";
 import { io } from "socket.io-client";
 
@@ -14,6 +14,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const listRef = useRef<HTMLUListElement>(null);
+
   const fetchNotes = async (page: number) => {
     setLoading(true);
     try {
@@ -21,7 +22,6 @@ function App() {
         `https://kazamsoftware.onrender.com/getAll?page=${page}&limit=10` // Corrected the query string
       );
       const data = await res.json();
-
       // Prepend new notes to the existing ones to keep the latest on top
       setNotes((prev: any) => [...data?.data, ...prev]); // Prepend new notes to the front
       console.log(data);
@@ -36,6 +36,7 @@ function App() {
       setLoading(false);
     }
   };
+
   const handleAddNote = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newNote.trim()) {
