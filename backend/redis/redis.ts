@@ -3,15 +3,13 @@ dotenv.config();
 
 const Redis = require("ioredis");
 
-// Create a new Redis client
 const redisClient = new Redis({
-  host: "redis-12675.c212.ap-south-1-1.ec2.cloud.redislabs.com",
-  port: "12675",
+  host: process.env.Host,
+  port: process.env.Port,
   username: "default",
-  password: "dssYpBnYQrl01GbCGVhVq2e4dYvUrKJB",
+  password: process.env.Password,
   connectTimeout: 10000,
 });
-
 // Test the Redis connection
 redisClient
   .ping()
