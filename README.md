@@ -12,8 +12,7 @@ A real-time task notes app built with modern web technologies. This application 
 - **Language**: TypeScript (Frontend and Backend)
 - **Database**: MongoDB
 - **Cache**: Redis
-- **Pagination**: Infinite Scroll with controlled API fetch
-- **Limit**: Only 10 pages (maximum 100 tasks) can be fetched
+
 
 ---
 ## Important URL
@@ -23,10 +22,9 @@ A real-time task notes app built with modern web technologies. This application 
 ## 📦 Features
 
 - ✅ Real-time updates using Socket.IO
-- ✅ Add, update, and delete task notes
-- ✅ Infinite scrolling for task list
-- ✅ Paginated backend API (10 tasks per page)
-- ✅ API fetches a maximum of 10 pages (100 tasks)
+- ✅ Get All Task and create a new task
+- ✅ Loading skeleton effect
+- ✅ New Task will show on the TOP
 - ✅ Redis is used as a temporary cache for tasks
 - ✅ When Redis has more than 40 tasks, they are inserted into MongoDB automatically
 - ✅ Clean architecture with TypeScript on both client and server
