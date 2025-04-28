@@ -17,7 +17,7 @@ A real-time task notes app built with modern web technologies. This application 
 ---
 ## Important URL
 - Backend deployed URL https://kazamsoftware.onrender.com
-- Front-End deployement URL https://kazamsoftware-84tk.vercel.app/
+- Front-End deployement URL [[https://kazamsoftware-84tk.vercel.app/](https://kazamsoftware-7vp1.vercel.app/)](https://kazamsoftware-7vp1.vercel.app/)
 
 ## 📦 Features
 
