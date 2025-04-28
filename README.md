@@ -13,9 +13,10 @@ A real-time task notes app built with modern web technologies. This application 
 - **Database**: MongoDB
 - **Cache**: Redis
 
-
 ---
+
 ## Important URL
+
 - Backend deployed URL https://kazamsoftware.onrender.com
 - Front-End deployement URL https://kazamsoftware.vercel.app/
 
@@ -24,14 +25,29 @@ A real-time task notes app built with modern web technologies. This application 
 - ✅ Real-time updates using Socket.IO
 - ✅ Get All Task and create a new task
 - ✅ Loading skeleton effect
+
+### Frontend Features
+
+- ✅ Real-time updates using Socket.IO
+- ✅ Loading skeleton effect
+- ✅ Pagination added to fetch 10 tasks per page
+- ✅ Infinity Scroll
+- ✅ Responsive and fast UI built with React & Vite
 - ✅ New Task will show on the TOP
+
+### Backend Features
+
 - ✅ Redis is used as a temporary cache for tasks
 - ✅ When Redis has more than 40 tasks, they are inserted into MongoDB automatically
-- ✅ Clean architecture with TypeScript on both client and server
-- ✅ Responsive and fast UI built with React & Vite
+- ✅ Clean architecture with TypeScript
+- ✅ Efficient API endpoints for task management
+- ✅ Real-time communication with Socket.IO
+- ✅ Integration with MongoDB and Redis for optimized performance
 
 ---
+
 ## 📂 Folder Structure
+
       FrontEnd
           --src
               --app.jsx
@@ -39,7 +55,7 @@ A real-time task notes app built with modern web technologies. This application 
             --Service
                   ---FetcchAllTask.jsx
         Backend
-            controller 
+            controller
                   -db.js
             model
                 schema.ts
@@ -56,7 +72,8 @@ A real-time task notes app built with modern web technologies. This application 
                 RED_URL:""
                 MONGO_PASS
                 MONGO_USERNAME:""
-----
+
+---
 
 ## Responsive Design
 
@@ -65,7 +82,6 @@ A real-time task notes app built with modern web technologies. This application 
 #iPad mini
 ![image](https://github.com/user-attachments/assets/655d2a12-81e8-4c27-ba81-c2ef1c0ceed6)
 
-
 ---
 
 ## 📡 API Endpoints
@@ -73,12 +89,11 @@ A real-time task notes app built with modern web technologies. This application 
 ### `GET /getAll`
 
 - Returns All tasks
-  
+
 ### `POST /api/tasks`
 
 - Adds a new task
   -- socket.emit('add', task},
-
 
 ## 🧠 Redis and MongoDB Integration
 
