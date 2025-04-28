@@ -12,24 +12,51 @@ A real-time task notes app built with modern web technologies. This application 
 - **Language**: TypeScript (Frontend and Backend)
 - **Database**: MongoDB
 - **Cache**: Redis
-- **Pagination**: Infinite Scroll with controlled API fetch
-- **Limit**: Only 10 pages (maximum 100 tasks) can be fetched
+
 
 ---
+## Important URL
+- Backend deployed URL https://kazamsoftware.onrender.com
+- Front-End deployement URL https://kazamsoftware.vercel.app/
 
 ## 📦 Features
 
 - ✅ Real-time updates using Socket.IO
-- ✅ Add, update, and delete task notes
-- ✅ Infinite scrolling for task list
-- ✅ Paginated backend API (10 tasks per page)
-- ✅ API fetches a maximum of 10 pages (100 tasks)
+- ✅ Get All Task and create a new task
+- ✅ Loading skeleton effect
+- ✅ New Task will show on the TOP
 - ✅ Redis is used as a temporary cache for tasks
 - ✅ When Redis has more than 40 tasks, they are inserted into MongoDB automatically
 - ✅ Clean architecture with TypeScript on both client and server
 - ✅ Responsive and fast UI built with React & Vite
 
 ---
+## 📂 Folder Structure
+      FrontEnd
+          --src
+              --app.jsx
+
+            --Service
+                  ---FetcchAllTask.jsx
+        Backend
+            controller 
+                  -db.js
+            model
+                schema.ts
+            redis
+                redisConfiguration.ts
+            index.ts
+
+            env
+                PORT: ''
+                REDISPORT: ''
+                MONGO_URI: ""
+                REDISHOST:''
+                TASK_KEY:""
+                RED_URL:""
+                MONGO_PASS
+                MONGO_USERNAME:""
+----
 
 ## Responsive Design
 
@@ -38,22 +65,20 @@ A real-time task notes app built with modern web technologies. This application 
 #iPad mini
 ![image](https://github.com/user-attachments/assets/655d2a12-81e8-4c27-ba81-c2ef1c0ceed6)
 
-## 📂 Project Structure
 
 ---
 
 ## 📡 API Endpoints
 
-### `GET /api/getAll?page=1`
+### `GET /getAll`
 
-- Returns 10 tasks per page.
-- Maximum allowed page: 10
-
+- Returns All tasks
+  
 ### `POST /api/tasks`
 
 - Adds a new task
-- Backend deployed URL https://kazamsoftware.onrender.com
-- Front-End deployement URL https://kazamsoftware-84tk.vercel.app/
+  -- socket.emit('add', task},
+
 
 ## 🧠 Redis and MongoDB Integration
 
