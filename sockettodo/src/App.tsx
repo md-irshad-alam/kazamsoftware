@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { fetchNotesAPI } from "./service/fetchApi";
 
 // const socket = io("https://kazamsoftware.onrender.com");
-const socket = io("http://localhost:4000");
+const socket = io("https://kazamsoftware.onrender.com");
 function App() {
   interface Note {
     content: string;

@@ -4,7 +4,7 @@ export async function fetchNotesAPI(page: any) {
     // coonder.com/getAll
     console.log(page);
     const res = await fetch(
-      `http://localhost:4000/api/getAll?page=${page}&limit=9`
+      `https://kazamsoftware.onrender.com/api/getAll?page=${page}&limit=9`
     );
 
     if (!res.ok) {
