@@ -20,16 +20,15 @@ const http_1 = __importDefault(require("http"));
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const taskmodel_1 = __importDefault(require("./mode/taskmodel"));
-// import { socketIo } from "socket.io";
-const socket_io_1 = require("socket.io"); // Updated import for socket.io
+const socket_io_1 = require("socket.io");
+const getAll_1 = __importDefault(require("./controller/getAll"));
 const port = process.env.PORT || 4000;
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const REDIS_KEY = process.env.TASK_KEY;
 const io = new socket_io_1.Server(server, {
-    // Updated to use socketIo
     cors: {
-        origin: "*", // You can specify the frontend URL here (e.g., http://localhost:3000)
+        origin: "*",
         methods: ["GET", "POST"],
     },
 });
@@ -37,7 +36,6 @@ app.use(express_1.default.json());
 app.use(express_1.default.static("public"));
 app.use((0, cors_1.default)());
 // db connection
-(0, db_1.default)();
 // scoket connection
 io.on("connection", (socket) => {
     socket.on("add", (item) => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,7 +48,6 @@ io.on("connection", (socket) => {
                 yield taskmodel_1.default.insertMany(tasks);
                 yield redis_1.default.del(REDIS_KEY);
                 console.log("flushed redis to mongodb");
-                io.emit("tasksFlushed", tasks);
             }
             else {
                 yield redis_1.default.set(REDIS_KEY, JSON.stringify(tasks));
@@ -62,27 +59,10 @@ io.on("connection", (socket) => {
         }
     }));
 });
-// Get all tasks from redis and mongodb
-app.get("/getAll", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const redisData = yield redis_1.default.get(REDIS_KEY);
-        const redisTask = redisData ? JSON.parse(redisData) : [];
-        const redisTaskSorted = redisTask.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        const mongoTasks = yield taskmodel_1.default.find({}).sort({ createdAt: -1 });
-        const allTasks = [...redisTaskSorted, ...mongoTasks];
-        res.json({
-            data: allTasks,
-            total: allTasks.length,
-            source: "combined",
-        });
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "server error" });
-    }
-}));
+app.get("/api/getAll", getAll_1.default);
 server.listen(port, () => {
     try {
+        (0, db_1.default)();
         console.log("server running!", port);
     }
     catch (error) {

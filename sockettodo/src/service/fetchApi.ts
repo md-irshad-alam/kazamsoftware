@@ -1,6 +1,11 @@
-export async function fetchNotesAPI() {
+export async function fetchNotesAPI(page: any) {
   try {
-    const res = await fetch(`https://kazamsoftware.onrender.com/getAll`);
+    //kazamsoftware.onre
+    // coonder.com/getAll
+    console.log(page);
+    const res = await fetch(
+      `http://localhost:4000/api/getAll?page=${page}&limit=9`
+    );
 
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);

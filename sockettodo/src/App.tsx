@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { io } from "socket.io-client";
 import { fetchNotesAPI } from "./service/fetchApi";
 
-const socket = io("https://kazamsoftware.onrender.com");
+// const socket = io("https://kazamsoftware.onrender.com");
+const socket = io("http://localhost:4000");
 function App() {
   interface Note {
     content: string;
@@ -12,17 +13,27 @@ function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(0); // Add this state for total pages
   const listRef = useRef<HTMLUListElement>(null);
 
   const fetchNotes = async () => {
     setLoading(true);
     try {
-      const data = await fetchNotesAPI();
-      setNotes((prev: any) => [...data?.data, ...prev]);
-      if (data?.data.length === 0) {
-        console.log("No more notes to load.");
+      const data = await fetchNotesAPI(page);
+
+      // Check if there is no more data
+      if (data.currentPage >= data.totalPages) {
+        setHasMore(false); // Disable further page fetching
+        console.log("No more data to load.");
       }
+
+      // Update total pages
+      setTotalPages(data.totalPages);
+
+      // Append new data to the existing notes list
+      setNotes((prev) => [...prev, ...data.data]);
     } catch (err) {
       console.error("Fetch error:", err);
     } finally {
@@ -35,17 +46,28 @@ function App() {
     if (newNote.trim()) {
       socket.emit("add", { content: newNote });
       setNewNote("");
-      setNotes((prev) => [
-        { content: newNote, createdAt: Date.now() },
-        ...prev,
-      ]);
+      const newNoteObj = { content: newNote, createdAt: Date.now() };
+      setNotes((prev) => [newNoteObj, ...prev]);
     }
   };
 
   useEffect(() => {
     fetchNotes();
-  }, []);
+  }, [page]);
 
+  const handleScrollInfinite = () => {
+    const container = listRef.current;
+    if (!container || loading || !hasMore) return; // Do not load more if no data left or currently loading
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    if (scrollTop + clientHeight >= scrollHeight - 50) {
+      if (page < totalPages) {
+        // Only update page if more data is available
+        setPage((prev) => prev + 1); // Load the next page
+      }
+    }
+  };
+  console.log(notes);
+  console.log(hasMore);
   return (
     <div className="w-full bg-white absolute top-0 bottom-0 sm:bottom-0 left-0 right-0 flex items-center justify-center">
       <div className="lg:w-[30vw] sm:w-[80%] p-2 mx-auto rounded-lg shadow-md overflow-hidden">
@@ -86,8 +108,9 @@ function App() {
             Notes
           </h2>
           <ul
-            className="space-y-2 overflow-auto max-h-[50vh] custom-scroll"
+            className="space-y-2 overflow-auto max-h-[30vh] custom-scroll"
             ref={listRef}
+            onScroll={handleScrollInfinite}
           >
             {loading
               ? // show loading skeletons if loading
