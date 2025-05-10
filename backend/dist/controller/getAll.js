@@ -26,12 +26,21 @@ const getAllController = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const redisTaskSorted = redisTask.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         const mongoTasks = yield taskmodel_1.default.find({}).sort({ createdAt: -1 });
         const allTasks = [...redisTaskSorted, ...mongoTasks];
+        if (allTasks.length === 0) {
+            return res.json({
+                data: [],
+                total: 0,
+                currentPage: page,
+                totalPages: 0,
+                source: "combined",
+            });
+        }
         const total = allTasks.length;
         // Calculate pagination
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
         const paginatedTasks = allTasks.slice(startIndex, endIndex);
-        let message = res.json({
+        res.json({
             data: paginatedTasks,
             total,
             currentPage: page,

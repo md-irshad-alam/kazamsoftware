@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { io } from "socket.io-client";
-import { fetchNotesAPI } from "./service/fetchApi";
 
+import { fetchNotesAPI, localUrl } from "./service/fetchApi";
+import mqtt from "mqtt";
 // const socket = io("https://kazamsoftware.onrender.com");
-const socket = io("https://kazamsoftware.onrender.com");
+// const socket = io("https://kazamsoftware.onrender.com");
+
+const client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt");
+// const socket = io(localUrl);
 function App() {
   interface Note {
     content: string;
@@ -44,7 +47,8 @@ function App() {
   const handleAddNote = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newNote.trim()) {
-      socket.emit("add", { content: newNote });
+      // socket.emit("add", { content: newNote });
+      client.publish("task/new", JSON.stringify({ content: newNote }));
       setNewNote("");
       const newNoteObj = { content: newNote, createdAt: Date.now() };
       setNotes((prev) => [newNoteObj, ...prev]);
@@ -66,8 +70,31 @@ function App() {
       }
     }
   };
-  console.log(notes);
-  console.log(hasMore);
+
+  useEffect(() => {
+    client.on("connect", () => {
+      console.log("✅ Frontend connected to MQTT");
+    });
+
+    client.subscribe("task/update", (err) => {
+      if (!err) {
+        console.log("👂 Subscribed to task.update");
+      }
+    });
+
+    client.on("message", (topic, message) => {
+      if (topic === "task.update") {
+        try {
+          const updatedTasks = JSON.parse(message.toString());
+          setNotes(updatedTasks);
+        } catch (e) {
+          console.error("Failed to parse message", e);
+        }
+      }
+    });
+  }, []);
+  // for the testing only
+
   return (
     <div className="w-full bg-white absolute top-0 bottom-0 sm:bottom-0 left-0 right-0 flex items-center justify-center">
       <div className="lg:w-[30vw] sm:w-[80%] p-2 mx-auto rounded-lg shadow-md overflow-hidden">

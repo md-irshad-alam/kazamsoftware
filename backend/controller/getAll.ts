@@ -14,10 +14,19 @@ const getAllController = async (req: any, res: any) => {
       (a: any, b: any) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-
     const mongoTasks = await taskmodel.find({}).sort({ createdAt: -1 });
 
     const allTasks = [...redisTaskSorted, ...mongoTasks];
+
+    if (allTasks.length === 0) {
+      return res.json({
+        data: [],
+        total: 0,
+        currentPage: page,
+        totalPages: 0,
+        source: "combined",
+      });
+    }
 
     const total = allTasks.length;
 
@@ -26,7 +35,7 @@ const getAllController = async (req: any, res: any) => {
     const endIndex = startIndex + limit;
 
     const paginatedTasks = allTasks.slice(startIndex, endIndex);
-    let message = res.json({
+    res.json({
       data: paginatedTasks,
       total,
       currentPage: page,
