@@ -3,7 +3,8 @@ import "./App.css";
 
 import { fetchNotesAPI } from "./service/fetchApi";
 import mqtt from "mqtt";
-const client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt");
+// const client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt");
+const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
 function App() {
   interface Note {
     content: string;
