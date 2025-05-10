@@ -1,13 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 
-import { fetchNotesAPI, localUrl } from "./service/fetchApi";
+import { fetchNotesAPI } from "./service/fetchApi";
 import mqtt from "mqtt";
-// const socket = io("https://kazamsoftware.onrender.com");
-// const socket = io("https://kazamsoftware.onrender.com");
-
 const client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt");
-// const socket = io(localUrl);
 function App() {
   interface Note {
     content: string;

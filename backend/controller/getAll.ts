@@ -43,7 +43,7 @@ const getAllController = async (req: any, res: any) => {
       source: "combined",
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in getAllController:", error);
     res.status(500).json({ error: "Server error" });
   }
 };

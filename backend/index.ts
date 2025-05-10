@@ -16,13 +16,25 @@ const REDIS_KEY = process.env.TASK_KEY || "tasks";
 
 // MQTT setup
 const MQTT_TOPIC_NEW_TASK = "task/new"; // topic to receive new tasks
+
 const client = mqtt.connect("mqtt://broker.hivemq.com");
+
+client.on("connect", () => {
+  console.log("✅ MQTT client connected to broker");
+
+  client.subscribe(MQTT_TOPIC_NEW_TASK, (err) => {
+    if (!err) {
+      console.log(`Subscribed to ${MQTT_TOPIC_NEW_TASK}`);
+    }
+  });
+});
 
 // Handle incoming MQTT messages
 client.on("message", async (topic, message) => {
   if (topic === MQTT_TOPIC_NEW_TASK) {
     try {
       const item = JSON.parse(message.toString());
+
       const data = await redis.get(REDIS_KEY);
       let tasks = data ? JSON.parse(data) : [];
       tasks.push({ content: item.content, createdAt: new Date() });
@@ -32,7 +44,7 @@ client.on("message", async (topic, message) => {
         await redis.del(REDIS_KEY);
         console.log("✅ Flushed Redis to MongoDB");
       } else {
-        // await redis.set(REDIS_KEY, JSON.stringify(tasks));
+        await redis.set(REDIS_KEY, JSON.stringify(tasks));
         console.log("📌 Task added to Redis");
       }
     } catch (error) {
