@@ -8,7 +8,7 @@ A real-time task notes app built with modern web technologies. This application 
 
 - **Frontend**: React (Vite)
 - **Backend**: Node.js + Express.js
-- **Real-time**: Socket.IO
+- **Real-time**: MQTT
 - **Language**: TypeScript (Frontend and Backend)
 - **Database**: MongoDB
 - **Cache**: Redis
@@ -92,8 +92,12 @@ A real-time task notes app built with modern web technologies. This application 
 
 ### `POST /api/tasks`
 
-- Adds a new task
-  -- socket.emit('add', task},
+- Adds a new
+  -- socket.subscribe('add/new', task} // backend
+  -- socket.publish('add/new',{task}} // front-end
+
+  --Get ALL
+  app.get('/fetchAll')
 
 ## 🧠 Redis and MongoDB Integration
 
